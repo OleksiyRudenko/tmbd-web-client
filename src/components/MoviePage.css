@@ -1,0 +1,9 @@
+:local(.container) {
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+:local(.container) > div {
+    padding: 0 0.3rem 0 0.3rem;
+    text-align: justify;
+}

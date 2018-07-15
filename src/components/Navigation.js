@@ -18,10 +18,30 @@ const styles = {
   },
 };
 
-const routes = [
-  { path: '/actor', title: 'Actor page' },
-  { path: '/movie', title: 'Movie page' },
+const links = [
+  { path: '/', title: 'Home' },
   { path: '/list', title: 'List of movies' },
+];
+
+const routes = [
+  {
+    exact: true,
+    path: '/list',
+    title: 'List of movies',
+    component: MoviesList,
+  },
+  {
+    exact: false,
+    path: '/actor/:id',
+    title: 'Actor page',
+    component: ActorPage,
+  },
+  {
+    exact: false,
+    path: '/movie/:id?',
+    title: 'Movie page',
+    component: MoviePage,
+  },
 ];
 
 const NavLink = props => <Link {...props} />;
@@ -53,8 +73,8 @@ class Navigation extends Component {
                     </Typography>
                     <nav>
                       <ul className="navigation-menu">
-                        {routes.map((route, idx) =>
-                          this.renderRouteLinkListItem(idx, route)
+                        {links.map((link, idx) =>
+                          this.renderRouteLinkListItem(idx, link)
                         )}
                       </ul>
                     </nav>
@@ -62,9 +82,16 @@ class Navigation extends Component {
                 </AppBar>
               </div>
             </header>
-            <Route exact path="/actor" component={ActorPage} />
-            <Route exact path="/movie" component={MoviePage} />
-            <Route exact path="/list" component={MoviesList} />
+            <main>
+              {routes.map((route, idx) => (
+                <Route
+                  exact={route.exact}
+                  path={route.path}
+                  component={route.component}
+                  key={idx}
+                />
+              ))}
+            </main>
           </Fragment>
         </Router>
       </div>
