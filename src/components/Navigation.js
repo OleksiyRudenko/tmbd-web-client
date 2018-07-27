@@ -1,6 +1,6 @@
 /* @flow */
 import React, { Component, Fragment } from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -26,10 +26,27 @@ type Props = {
 type State = {};
 
 const routes = [
-  { path: '/', title: 'Main page' },
-  { path: '/actor', title: 'Actor page' },
-  { path: '/movie', title: 'Movie page' },
-  { path: '/list', title: 'List of movies' },
+  {
+    path: { navigation: '/' },
+    isExact: true,
+    title: 'Main page',
+    component: MainPage,
+  },
+  {
+    path: { navigation: '/actor', routing: '/actor/:id?' },
+    title: 'Actor page',
+    component: ActorPage,
+  },
+  {
+    path: { navigation: '/movie', routing: '/movie/:id?' },
+    title: 'Movie page',
+    component: MoviePage,
+  },
+  {
+    path: { navigation: '/list' },
+    title: 'List of movies',
+    component: MoviesList,
+  },
 ];
 
 const NavLink = props => <Link {...props} />;
@@ -67,19 +84,31 @@ class Navigation extends Component<Props, State> {
               </Toolbar>
             </AppBar>
           </div>
-          <Route exact path="/" component={MainPage} />
-          <Route exact path="/actor" component={ActorPage} />
-          <Route exact path="/movie" component={MoviePage} />
-          <Route exact path="/list" component={MoviesList} />
+          {this.renderRoutes(routes)}
         </Fragment>
       </Router>
+    );
+  }
+
+  renderRoutes(routes) {
+    return (
+      <Switch>
+        {routes.map((route, idx) => (
+          <Route
+            key={idx}
+            exact={route.isExact}
+            path={route.path.routing || route.path.navigation}
+            component={route.component}
+          />
+        ))}
+      </Switch>
     );
   }
 
   renderRouteLinkListItem(idx, route) {
     return (
       <li key={idx}>
-        <Button color="inherit" component={NavLink} to={route.path}>
+        <Button color="inherit" component={NavLink} to={route.path.navigation}>
           {route.title}
         </Button>
       </li>
