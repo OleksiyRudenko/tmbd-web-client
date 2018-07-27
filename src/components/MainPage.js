@@ -1,7 +1,9 @@
 /* @flow */
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import ButtonBase from '@material-ui/core/ButtonBase';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -35,6 +37,10 @@ const styles = () => ({
     maxWidth: 345,
     minHeight: 600,
     margin: '20px auto',
+  },
+  cardButton: {
+    display: 'block',
+    textAlign: 'initial',
   },
   media: {
     height: 0,
@@ -130,29 +136,36 @@ class MainPage extends Component<Props, State> {
                 {data.data.map(item => (
                   <Grid key={item.id} item>
                     <Card className={classes.card}>
-                      <CardMedia
-                        className={classes.media}
-                        image={`${poster}${item.poster_path}`}
-                        alt={item.title}
-                        title={item.title}
-                      />
-                      <CardContent>
-                        <Typography
-                          gutterBottom
-                          variant="headline"
-                          component="h2"
-                        >
-                          {item.title}
-                        </Typography>
-                        <Typography component="p">{item.overview}</Typography>
-                        <Typography
-                          gutterBottom
-                          variant="headline"
-                          component="h2"
-                        >
-                          IMDB score: {item.vote_average}
-                        </Typography>
-                      </CardContent>
+                      <ButtonBase
+                        className={classes.cardButton}
+                        component={Link}
+                        disableRipple
+                        to={`/movie/${item.id}`}
+                      >
+                        <CardMedia
+                          className={classes.media}
+                          image={`${poster}${item.poster_path}`}
+                          alt={item.title}
+                          title={item.title}
+                        />
+                        <CardContent>
+                          <Typography
+                            gutterBottom
+                            variant="headline"
+                            component="h2"
+                          >
+                            {item.title}
+                          </Typography>
+                          <Typography component="p">{item.overview}</Typography>
+                          <Typography
+                            gutterBottom
+                            variant="headline"
+                            component="h2"
+                          >
+                            IMDB score: {item.vote_average}
+                          </Typography>
+                        </CardContent>
+                      </ButtonBase>
                       <CardActions>
                         <IconButton
                           className={classes.button}
